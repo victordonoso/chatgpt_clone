@@ -1,0 +1,42 @@
+<!-- query.html -->
+<html>
+<head>
+    <title>Query</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // get the CSRF token from the cookie
+            var csrftoken = Cookies.get('csrftoken');
+            
+            // set the CSRF token in the AJAX headers
+            $.ajaxSetup({
+                headers: { 'X-CSRFToken': csrftoken }
+            });
+            
+            $('form').on('submit', function(event) {
+                event.preventDefault();
+                var prompt = $('#prompt').val();
+                $.ajax({
+                    url: '/query/',
+                    type: 'POST',
+                    data: {prompt: prompt},
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#response').append('<p>' + data.response + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Query</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="textarea" id="prompt" name="prompt">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response"></div>
+</body>
+</html>

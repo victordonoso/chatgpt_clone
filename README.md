@@ -1,7 +1,7 @@
 # A simple ChatGPT clone in Django using the new gpt-3.5-turbo model
 by [Victor Donoso](https://github.com/victordonoso)
 
-This project uses the new [gpt-3.5-turbo](https://platform.openai.com/docs/guides/chat/chat-completions-beta) model from [OpenAI](https://openai.com/) and a [Django](https://www.djangoproject.com/) webserver to create a simple chatbot to run it locally, consuming your own OpenAI credits by using your API Key.
+This project uses the new [gpt-3.5-turbo](https://platform.openai.com/docs/guides/chat/chat-completions-beta) model API from [OpenAI](https://openai.com/) and a [Django](https://www.djangoproject.com/) webserver to make a simple chatbot frontend to run it locally, consuming your own OpenAI credits by using your API Key.
 
 Currently there are no models, just using the simplicity of Django as a webserver and using the OpenAI API to generate responses from prompts and a simple frontend to interact with the bot.
 

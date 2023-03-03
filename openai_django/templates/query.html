@@ -1,0 +1,70 @@
+<!-- query.html -->
+<html>
+<head>
+    <title>Query</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <script>
+        $(document).ready(function() {
+            // Send the form on enter keypress and avoid if shift is pressed
+            $('#prompt').keypress(function(event) {
+                if (event.keyCode === 13 && !event.shiftKey) {
+                    event.preventDefault();
+                    $('form').submit();
+                }
+            });
+            $('form').on('submit', function(event) {
+                event.preventDefault();
+            // get the CSRF token from the cookie
+            var csrftoken = Cookies.get('csrftoken');
+            
+            // set the CSRF token in the AJAX headers
+            $.ajaxSetup({
+                headers: { 'X-CSRFToken': csrftoken }
+            });
+                // Get the prompt
+                var prompt = $('#prompt').val();
+                var dateTime = new Date();
+                var time = dateTime.toLocaleTimeString();
+                // Add the prompt to the response div
+                $('#response').append('<p>('+ time + ') <i class="bi bi-person"></i>: ' + prompt + '</p>');
+                // Clear the prompt
+                $('#prompt').val('');
+                $.ajax({
+                    url: '/',
+                    type: 'POST',
+                    data: {prompt: prompt},
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#response').append('<p>('+ time + ') <i class="bi bi-robot"></i>: ' + data.response + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container p-3">
+        <h3>ChatGPT Clone</h3>
+        <a href="https://github.com/victordonoso/openai" class="link-info">Project on Github</a>
+        <div class="mb-3">
+            <form method="post">
+                {% csrf_token %}
+                <label for="prompt" class="form-label"><strong>Prompt: </strong></label>
+                <textarea class="form-control" type="textarea" id="prompt" name="prompt" rows="3"></textarea>
+                <br>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+        <br>
+        <div class="mb-3">
+            <h6>Response:</h6> 
+            <div class="container border overflow-auto h-50" id="response"></div>
+            
+        </div>
+    </div>
+</body>
+</html>

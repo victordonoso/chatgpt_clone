@@ -7,7 +7,7 @@ import openai
 if settings.OPENAI_API_KEY:
     openai.api_key = settings.OPENAI_API_KEY
 else:
-    openai.api_key = os.environ.get('OAI_API_KEY')
+    raise Exception('OpenAI API Key not found')
 
 
 def get_completion(prompt):

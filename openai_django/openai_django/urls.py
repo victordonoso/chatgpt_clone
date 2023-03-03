@@ -19,6 +19,6 @@ from base_app.views import query_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('query/', query_view, name='query'),
+    path('', query_view, name='query'),
 
 ]
